@@ -1,6 +1,7 @@
 ﻿using MimeType.Resources;
 using MimeType.VirtualFile;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace MimeType
@@ -14,11 +15,11 @@ namespace MimeType
     {
         private readonly static MimeTypeStore _storeMimeType = new MimeTypeStore();
 
-        public string this[string extension]
+        public string this[string fileNameOrExtension]
         {
             get
             {
-                return Get(extension);
+                return Get(fileNameOrExtension);
             }
         }
 
@@ -34,21 +35,33 @@ namespace MimeType
             }
         }
 
-        public static string Get(string extension)
+        public static string Get(string fileNameOrExtension)
         {
             if (_storeMimeType.Count == 0)
                 AddMimeResources();
 
-            var newExtension = extension.StartsWith(".") ? extension.Replace(".", "") : extension;
-            return _storeMimeType.GetValue(newExtension);
+            return _storeMimeType.GetValue(GetExtension(fileNameOrExtension));
+        }
+        
+        public static string GetExtension(string fileNameOrExtension)
+        {
+            var dotIndex = fileNameOrExtension.LastIndexOf(".");
+            
+            if(dotIndex >= 0)
+            {
+                fileNameOrExtension = fileNameOrExtension.Substring(dotIndex);
+                fileNameOrExtension = fileNameOrExtension.StartsWith(".") ? fileNameOrExtension.Replace(".", "") : fileNameOrExtension;
+            }
+            
+            return fileNameOrExtension;
         }
     }
 
     public static class MimeExtensions
     {
-        public static string Get(this IMime mime, string extension)
+        public static string Get(this IMime mime, string fileNameOrExtension)
         {
-            return mime[extension];
+            return mime[fileNameOrExtension];
         }
     }
 }
