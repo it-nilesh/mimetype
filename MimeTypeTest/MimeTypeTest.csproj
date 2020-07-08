@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Content\MimeType-videos.json" />
+    <None Remove="Content\MimeType.json" />
+    <None Remove="MimeType.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content\MimeType-videos.json" />
+    <EmbeddedResource Include="Content\MimeType-audio.json" />
+    <EmbeddedResource Include="Content\MimeType.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MimeType\MimeType.csproj" />
+  </ItemGroup>
+
+</Project>
