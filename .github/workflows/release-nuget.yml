@@ -1,6 +1,9 @@
 name: Release NuGet Package
 
 on:
+  push:
+    tags:
+      - "v*.*.*"
   release:
     types:
       - published
@@ -42,9 +45,14 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
             VERSION="${{ github.event.release.tag_name }}"
-            VERSION="${VERSION#v}"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF_NAME}"
           else
             VERSION="1.0.0-local.${{ github.run_number }}"
+          fi
+
+          if [[ "$VERSION" == v* ]]; then
+            VERSION="${VERSION#v}"
           fi
 
           echo "PACKAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
@@ -59,5 +67,5 @@ jobs:
           path: artifacts/packages/*.nupkg
 
       - name: Publish to NuGet
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
         run: dotnet nuget push "artifacts/packages/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
