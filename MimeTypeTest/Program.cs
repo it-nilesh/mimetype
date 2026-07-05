@@ -20,8 +20,12 @@ namespace MimeTypeTest
             var mimeType2 = mimeType["z3"];
             Console.WriteLine(" z3 = " + mimeType2);
 
+            Console.WriteLine(" avif = " + Mime.Get("image.avif"));
+            Console.WriteLine(" wasm = " + Mime.Get("module.wasm"));
+            Console.WriteLine(" zst = " + Mime.Get("archive.zst"));
+            Console.WriteLine(" unknown = " + Mime.GetOrDefault("file.unknown"));
+
             Console.WriteLine("Hello World!");
-            Console.ReadLine();
         }
     }
 }

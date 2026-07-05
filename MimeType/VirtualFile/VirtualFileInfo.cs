@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace MimeType.VirtualFile
 {
@@ -44,26 +43,43 @@ namespace MimeType.VirtualFile
 
         public VirtualFileInfo Read(string path, string extension)
         {
-            for (int keyIndex = 0; keyIndex < _mimeStore.Count; keyIndex++)
+            foreach (var fileName in _mimeStore.Keys.ToArray())
             {
-                string fileName = _mimeStore.ElementAt(keyIndex).Key;
-                if (Regex.IsMatch(fileName, $@"^*.{path}.*-*.({extension})") ||
-                    Regex.IsMatch(fileName, $@"^*.{path}.*.({extension})"))
+                if (IsMatch(fileName, path, extension))
                 {
-                    _mimeStore[fileName] = Deserialize<MimeStore>(_virtualFileReader.Read(fileName));
+                    _mimeStore[fileName] = DeserializeMimeStore(_virtualFileReader.Read(fileName));
                 }
             }
 
             return this;
         }
 
-        public static T Deserialize<T>(Stream s)
+        public IEnumerable<KeyValuePair<string, string>> GetValues()
         {
-            using (StreamReader reader = new StreamReader(s))
-            using (JsonTextReader jsonReader = new JsonTextReader(reader))
+            foreach (var mimeStore in _mimeStore.Values)
             {
-                JsonSerializer ser = new JsonSerializer();
-                return ser.Deserialize<T>(jsonReader);
+                if (mimeStore == null)
+                    continue;
+
+                foreach (var mimeType in mimeStore)
+                    yield return mimeType;
+            }
+        }
+
+        public static MimeStore DeserializeMimeStore(Stream s)
+        {
+            using (s)
+            {
+                var values = JsonSerializer.Deserialize<Dictionary<string, string>>(s);
+                var mimeStore = new MimeStore();
+
+                if (values == null)
+                    return mimeStore;
+
+                foreach (var value in values)
+                    mimeStore[value.Key] = value.Value;
+
+                return mimeStore;
             }
         }
 
@@ -78,6 +94,12 @@ namespace MimeType.VirtualFile
             }
 
             return value;
+        }
+
+        private static bool IsMatch(string fileName, string path, string extension)
+        {
+            return fileName.IndexOf(path, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                fileName.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
