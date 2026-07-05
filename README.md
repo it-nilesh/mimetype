@@ -1,5 +1,8 @@
 # NMimeType
 
+[![NuGet](https://img.shields.io/nuget/v/NMimeType.svg)](https://www.nuget.org/packages/NMimeType/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/NMimeType.svg)](https://www.nuget.org/packages/NMimeType/)
+
 Fast MIME type lookup for .NET applications.
 
 The package resolves MIME types from file names, paths, or extensions using an embedded lookup table. It keeps lookups case-insensitive and indexes the table in memory so repeated reads are fast.
