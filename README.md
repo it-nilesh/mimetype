@@ -1,4 +1,4 @@
-# MimeType
+# NMimeType
 
 Fast MIME type lookup for .NET applications.
 
@@ -148,7 +148,7 @@ Release flow:
 
 1. Create a tag such as `v1.0.0`.
 2. Create and publish a GitHub Release for that tag.
-3. The workflow builds the solution, packs `MimeType`, uploads the `.nupkg` as a workflow artifact, and pushes it to nuget.org.
+3. The workflow builds the solution, packs `NMimeType`, uploads the `.nupkg` as a workflow artifact, and pushes it to nuget.org.
 
 The package version is taken from the release tag. For example, `v1.0.0` publishes package version `1.0.0`.
 

@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
-    <PackageId>MimeType</PackageId>
+    <PackageId>NMimeType</PackageId>
     <Version>1.0.0</Version>
-    <Authors>MimeType contributors</Authors>
-    <Company>MimeType contributors</Company>
+    <Authors>NMimeType contributors</Authors>
+    <Company>NMimeType contributors</Company>
     <Description>Fast MIME type lookup for .NET applications using an embedded, indexed extension table.</Description>
     <PackageTags>mime;mimetype;content-type;file-extension;dotnet</PackageTags>
     <PackageProjectUrl>https://github.com/nileshvishwakarma/mimetype</PackageProjectUrl>
